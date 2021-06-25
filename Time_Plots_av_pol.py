@@ -21,8 +21,8 @@ def plot_average_pol(df):
     
     '''time series of the polution of the sensors; one per measurement (PM10 and PM2.5)'''
     
-    '''Check whether data frame contains any NaN, if yes: remove'''
-    if df.isnull().values.any() == True:
+    '''Defensive programming'''
+    if df.isnull().values.any() == True:                                                                                     # Check whether data frame contains any NaN, if yes: remove
         df = remove_missing(df)
     
     '''Find maximum and minimum avergae polututed sensor_id'''
