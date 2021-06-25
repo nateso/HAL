@@ -18,6 +18,24 @@ def load_data(lat_start, lat_end, long_start, long_end, start_datetime, delta_ho
     
     '''Merged data frame on P1 and P2 is outputted'''
     
+    '''Defensive programming'''
+    if not (isinstance(lat_start, float) or isinstance(lat_start, int)):                    # checks type of lat_start parameter with isinstance (int or float)
+        raise TypeError("Coordinate value only supports int and float")                     # raise TypeError is not numeric
+    if not (isinstance(lat_end, float) or isinstance(lat_end, int)):
+        raise TypeError("Coordinate value only supports int and float")
+    if not (isinstance(long_start, float) or isinstance(long_start, int)):
+        raise TypeError("Coordinate value only supports int and float")
+    if not (isinstance(long_end, float) or isinstance(long_end, int)):
+        raise TypeError("Coordinate value only supports int and float")
+    if not (isinstance(delta_hours, float) or isinstance(delta_hours, int)):
+        raise TypeError("Time delta value only supports int and float")
+    if delta_hours <= 0:                                                                    # if delta_hours is smaller equal zero:
+        raise ValueError("Time delta only defined for positive numbers")                    # raise value error
+    if lat_end <= lat_start:
+        raise ValueError("Latitude range ending starting point must be larger than starting point")
+    if long_end <= long_start:
+        raise ValueError("Longitude range ending starting point must be larger than starting point")
+    
     '''Import Data from REST_API'''
     # Basic parameters
     base_url='http://sensordata.gwdg.de/api/' 
