@@ -20,7 +20,9 @@ def remove_missing(df):
     miss = np.any([pd.isna(df['measurement_PM10']),pd.isna(df['measurement_PM2.5'])],axis = 0)
     n_miss = miss.sum()
     print(n_miss,"observations with missing values were removed from the data frame")
-    return df[miss == False]    
+    df = df[miss == False]
+    df = df.reset_index(drop = True) # reset the rownumbers
+    return df  
 
 
 # check for outliers and filter those using different methods
@@ -71,5 +73,7 @@ def remove_outliers(df,method = "Z-score", z_val = 2.58, crit_val = [0,100], qua
     exclude = np.any([exclude_PM10 == True, exclude_PM25 == True],axis = 0)
     n_excluded = exclude.sum()
     print(n_excluded,"outlier observations were deleted")
-    return df[exclude == False]
+    df = df[exclude == False]
+    df = df.reset_index(drop = True) # reset the rownumbers
+    return df
 
