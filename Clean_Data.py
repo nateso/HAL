@@ -4,11 +4,6 @@ import pandas as pd
 import numpy as np
 import warnings
 
-from ipynb.fs.full.Load_Data import load_data
-
-df = load_data(lat_start = 48, lat_end = 49, long_start = 9, long_end = 10, start_year = 2018, start_month = 4, start_day = 30, delta_hours = 1)
-
-
 # check for missing values and potentially remove those. Also print how many observations have been removed
 def remove_missing(df):
     """Detects and removes missing values, the function prints out how many values were deleted."""

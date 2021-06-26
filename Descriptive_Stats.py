@@ -6,16 +6,6 @@ import warnings
 import plotly.express as px
 from matplotlib import pyplot as plt
 
-from ipynb.fs.full.Load_Data import load_data
-from Clean_Data import remove_outliers
-from Clean_Data import remove_missing
-
-
-# Load Data
-df = load_data(lat_start = 51, lat_end = 52, long_start = 9, long_end = 10, start_year = 2018, start_month = 4, start_day = 30, delta_hours = 1)
-df = remove_missing(df)
-df = remove_outliers(df,method = "quantile", quantile = [0,0.99])
-
 # Define functions 
 def get_max(df,get_map = False):
     '''returns maximum PM10 and PM2.5 concentration'''
