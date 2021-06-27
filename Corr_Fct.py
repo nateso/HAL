@@ -40,6 +40,9 @@ def corr_matrix(df, plot = True):
     '''OUTPUT:'''
     
     '''A numpy array for the correlation matrix. If plot = True, the correlation matrix plot using seaborn is shown'''
+    
+    ###remove missing check###
+    
     pm25 = np.array(df['measurement_PM2.5'])
     pm10 = np.array(df['measurement_PM10'])
     
