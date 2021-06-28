@@ -1,18 +1,19 @@
 import requests
 from datetime import datetime, timedelta
 import pandas as pd
+import datetime
 
 def load_data(lat_start, lat_end, long_start, long_end, start_datetime, delta_hours):
     '''Function for loading the data out of the REST-API'''
     
     '''INPUT:'''
     
-    '''lat_start:                          latitude range starting point, type: byte'''
-    '''lat_end:                            latitude range ending point, type: byte'''
-    '''long_start:                         longitude range starting point, type: byte'''
-    '''long_end:                           longitude range ending point, type: byte'''
-    '''start_year, start_month, start_day: year / month / day of the measurement to start, type: byte'''
-    '''delta_hours:                        time delta to calculate time space of measurement, type: byte'''
+    '''lat_start:                          latitude range starting point'''
+    '''lat_end:                            latitude range ending point'''
+    '''long_start:                         longitude range starting point'''
+    '''long_end:                           longitude range ending point'''
+    '''start_datetime:                     year / month / day / hours / minutes / seconds of the measurement to start, must be ISO format'''
+    '''delta_hours:                        time delta to calculate time space of measurement'''
     
     '''OUPUT:'''
     
@@ -29,7 +30,9 @@ def load_data(lat_start, lat_end, long_start, long_end, start_datetime, delta_ho
         raise TypeError("Coordinate value only supports int and float")
     if not (isinstance(delta_hours, float) or isinstance(delta_hours, int)):
         raise TypeError("Time delta value only supports int and float")
-    if delta_hours <= 0:                                                                    # if delta_hours is smaller equal zero:
+    if not (isinstance(start_datetime, datetime.datetime)):
+        raise TypeError("Start datetime only supports datetime.fromisoformat() object")
+    if delta_hours < 0:                                                                     # if delta_hours is smaller equal zero:
         raise ValueError("Time delta only defined for positive numbers")                    # raise value error
     if lat_end <= lat_start:
         raise ValueError("Latitude range ending starting point must be larger than starting point")
