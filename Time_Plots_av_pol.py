@@ -1,15 +1,3 @@
-import requests
-import datetime
-import pandas as pd
-import numpy as np
-import warnings
-import matplotlib.pyplot as plt
-
-from Load_Data import load_data
-from Clean_Data import remove_outliers
-from Clean_Data import remove_missing
-
-
 def plot_average_pol(df):
     '''Function to plot the time series of the polution of the sensors with the highest/lowest average polution over time'''
     
@@ -47,18 +35,19 @@ def plot_average_pol(df):
     fig1, ax1 = plt.subplots(1, 2, sharey = False, figsize = (10, 6))
     
     # define each subplot
-    ax1[0].plot(df_max_PM10.time, df_max_PM10.measurement_PM10, label='average max.', c = 'red')                             # get time on x-axis, the measurement on y-axis
+    ax1[0].plot(pd.to_datetime(df_max_PM10['time']).dt.strftime("%Y/%m/%d %H:%M"), df_max_PM10.measurement_PM10, label='average max.', c = 'red')        # get time on x-axis, the measurement on y-axis
+        # moreover, the 'time' column is formatted to pd's datetime first and to a time string of "%Y/%m/%d %H:%M" format second to have better x-axis lables
     ax1[0].set_xlabel('Time')                                                                                                # set labels and titles
     ax1[0].set_ylabel('μg/m³')
-    ax1[0].set_title('Polution over requested time (threshold: PM10)')
+    ax1[0].set_title('Polution requested time (threshold: PM10)')
     ax1[0].grid(True)                                                                                                        # activate background grid
     ax1[0].legend(loc='upper left')                                                                                          # add legend
     ax1[0].xaxis.set_major_locator(plt.MaxNLocator(10))                                                                      # reducing maximum number of x-axis ticks to 10 for better readableness
     
-    ax1[1].plot(df_min_PM10.time, df_min_PM10.measurement_PM10, label='average min.', c = 'darkblue')
+    ax1[1].plot(pd.to_datetime(df_min_PM10['time']).dt.strftime("%Y/%m/%d %H:%M"), df_min_PM10.measurement_PM10, label='average min.', c = 'darkblue')
     ax1[1].set_xlabel('Time')
     ax1[1].set_ylabel('μg/m³')
-    ax1[1].set_title('Polution over requested time (threshold: PM10)')
+    ax1[1].set_title('Polution requested time (threshold: PM10)')
     ax1[1].grid(True)
     ax1[1].legend(loc='upper left')
     ax1[1].xaxis.set_major_locator(plt.MaxNLocator(10))
@@ -69,18 +58,18 @@ def plot_average_pol(df):
     fig2, ax2 = plt.subplots(1, 2, sharey = False, figsize = (10, 6))
     
     # define each subplot
-    ax2[0].plot(df_max_PM25.time, df_max_PM25['measurement_PM2.5'], label='average max.', c = 'red')
+    ax2[0].plot(pd.to_datetime(df_max_PM25['time']).dt.strftime("%Y/%m/%d %H:%M"), df_max_PM25['measurement_PM2.5'], label='average max.', c = 'red')
     ax2[0].set_xlabel('Time')
     ax2[0].set_ylabel('μg/m³')
-    ax2[0].set_title('Polution over requested time (threshold: PM2.5)')
+    ax2[0].set_title('Polution requested time (threshold: PM2.5)')
     ax2[0].grid(True)
     ax2[0].legend(loc='upper left')
     ax2[0].xaxis.set_major_locator(plt.MaxNLocator(10))
     
-    ax2[1].plot(df_min_PM25.time, df_min_PM25['measurement_PM2.5'], label='average min.', c = 'darkblue')
+    ax2[1].plot(pd.to_datetime(df_min_PM25['time']).dt.strftime("%Y/%m/%d %H:%M"), df_min_PM25['measurement_PM2.5'], label='average min.', c = 'darkblue')
     ax2[1].set_xlabel('Time')
     ax2[1].set_ylabel('μg/m³')
-    ax2[1].set_title('Polution over requested time (threshold: PM2.5)')
+    ax2[1].set_title('Polution requested time (threshold: PM2.5)')
     ax2[1].grid(True)
     ax2[1].legend(loc='upper left')
     ax2[1].xaxis.set_major_locator(plt.MaxNLocator(10))
