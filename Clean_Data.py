@@ -17,10 +17,19 @@ def remove_missing(df):
     
     '''A pandas data frame without missing values'''
     
-    miss = np.any([pd.isna(df['measurement_PM10']),pd.isna(df['measurement_PM2.5'])],axis = 0)
-    n_miss = miss.sum()
+    # Defensive programming
+    if not (isinstance(df,pd.core.frame.DataFrame)):
+        raise TypeError("df must be a pandas dataframe")
+    if not 'measurement_PM10' in df.columns: 
+        raise NameError("there is no variable called measurement_PM10")
+    if not 'measurement_PM2.5' in df.columns: 
+        raise NameError("there is no variable called measurement_PM2.5")
+        
+    # code 
+    miss = np.any([pd.isna(df['measurement_PM10']),pd.isna(df['measurement_PM2.5'])],axis = 0) # check which rows contain missing values
+    n_miss = miss.sum() # get number of missings 
     print(n_miss,"observations with missing values were removed from the data frame")
-    df = df[miss == False]
+    df = df[miss == False] # only retain rows without missing values
     df = df.reset_index(drop = True) # reset the rownumbers
     return df  
 
@@ -41,36 +50,59 @@ def remove_outliers(df,method = "Z-score", z_val = 2.58, crit_val = [0,100], qua
     '''OUTPUTS:'''
     
     '''Pandas data frame without outliers. Prints out how many observations were removed'''
-    measurement = df[['measurement_PM10','measurement_PM2.5']]
+    
+    # Defensive programming
+    if not isinstance(method,str):
+        raise TypeError("Method should be a string")
+    if not method in ["Z-score","critical_value","quantile"]:
+        raise NameError("invalid method was provided. possible options are: Z-score, critical_value or quantile")
     
     if method == "Z-score":
+        if not isinstance(z_val,(float,int)):
+            raise TypeError("z_val should be float or integer")
+    
+    if method == "critical_value":
+        if not isinstance(crit_val,list):
+            raise TypeError("crit_val should be a list with two elements")
+        if len(crit_val) < 2:
+            raise ValueError("need a lower and an upper bound (i.e. two elements)")
+        if crit_val[0] > crit_val[1]:
+            raise ValueError("the first element of crit_val should be smaller than the second")
+        if len(crit_val) > 2:
+            warnings.warn("Only first two elements of crit_val will be used!")
+            
+    
+    if method == "quantile":
+        if not isinstance(quantile,list):
+            raise TypeError("quantile should be a list with two elements")
+        if len(quantile) < 2:
+            raise ValueError("need a lower and an upper bound (i.e. two elements)")
+        if quantile[0] > quantile[1]:
+            raise ValueError("the first element of quantile should be smaller than the second")
+        if len(quantile) > 2:
+            warnings.warn("Only first two elements of quantile will be used!")
+        
+    measurement = df[['measurement_PM10','measurement_PM2.5']] # extract PM10 and PM2.5 measurements from the df
+    
+    if method == "Z-score": 
         mean = measurement.mean()
         sd = measurement.std()
-        z_score = (measurement - mean)/sd
+        z_score = (measurement - mean)/sd # calculate the z_score
+        # exclude observations based their z-scores
         exclude_PM10 = np.any([z_score['measurement_PM10'] < -z_val, z_score['measurement_PM10'] > z_val],axis = 0)
         exclude_PM25 = np.any([z_score['measurement_PM2.5'] < -z_val, z_score['measurement_PM2.5'] > z_val],axis = 0)
     
     if method == "critical_value":
-        if len(crit_val) < 2:
-            print("ERROR: please provide a lower and an upper bound")
-            return
-        if len(crit_val) > 2:
-            warnings.warn("Only first two elements of crit_val will be used!")
         exclude_PM10 = np.any([measurement['measurement_PM10'] < crit_val[0], measurement['measurement_PM10'] > crit_val[1]],axis = 0)
         exclude_PM25 = np.any([measurement['measurement_PM2.5'] < crit_val[0], measurement['measurement_PM2.5'] > crit_val[1]],axis = 0)
         
     if method == "quantile":
-        if len(quantile) < 2:
-            print("ERROR: please provide a lower and an upper quantile")
-            return 
-        if len(quantile) > 2:
-            warnings.warn("Only first two elements of quantile will be used!")
         upper = measurement.quantile(quantile[1])
         lower = measurement.quantile(quantile[0])
         exclude_PM10 = np.any([measurement['measurement_PM10'] < lower[0], measurement['measurement_PM10'] > upper[0]],axis = 0)
         exclude_PM25 = np.any([measurement['measurement_PM2.5'] < lower[1], measurement['measurement_PM2.5'] > upper[1]],axis = 0)
-            
-    exclude = np.any([exclude_PM10 == True, exclude_PM25 == True],axis = 0)
+    
+    exclude = np.any([exclude_PM10 == True, exclude_PM25 == True],axis = 0) # exclude observations as soon as at least one of the two measurements is an outlier
     n_excluded = exclude.sum()
     print(n_excluded,"outlier observations were deleted")
     df = df[exclude == False]
