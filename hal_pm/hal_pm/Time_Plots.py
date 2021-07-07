@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from .hal_pm import *
 
 def plot_average_pol(df, ax = None):
     '''Function to plot the time series of the polution of the sensors with the highest/lowest average polution over time'''
@@ -16,7 +17,7 @@ def plot_average_pol(df, ax = None):
     
     '''Defensive programming'''
     if df.isnull().values.any() == True:                                                                                     # Check whether data frame contains any NaN, if yes: remove
-        df = remove_missing(df)
+        df = Filter_Data.remove_missing(df)
     
     '''Find maximum and minimum avergae polututed sensor_id'''
     # For PM10:
@@ -85,4 +86,4 @@ def plot_average_pol(df, ax = None):
     if _ax == 1:
         fig.autofmt_xdate(rotation = 45)
 
-    return ax
+    return ax.show()
