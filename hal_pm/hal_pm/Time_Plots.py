@@ -83,6 +83,6 @@ def plot_average_pol(df, ax = None):
     ax[1,1].xaxis.set_major_locator(plt.MaxNLocator(10))
     
     if _ax == 1:
-        fig1.autofmt_xdate(rotation = 45)
+        fig.autofmt_xdate(rotation = 45)
 
     return ax
