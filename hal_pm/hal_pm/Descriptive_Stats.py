@@ -30,6 +30,10 @@ def get_max(df,get_map = True):
     '''maxima:        A Pandas Data Frame containing the maximum observations for PM10 and PM2.5'''
     '''max_map:       An interactive map with the location of the maxima'''
     
+    # defensive programming
+    if not isinstance(get_map,bool):
+        raise TypeError("get_map needs to be a boolean")
+    
     measurement = df[["measurement_PM10","measurement_PM2.5"]]
     
     where_max = measurement.idxmax()
@@ -64,6 +68,10 @@ def plot_mean_pm(df, time_interval = "1Min"):
     '''                Look at documentation of pandas.DataFrame.resample to get permissive values'''
     
     '''OUTPUTS:'''
+    
+    # Defensive programming
+    if not isinstance(time_interval,str):
+        raise TypeError("time_interval needs to be a string")
     
     df['date_time'] = pd.to_datetime(df['time'])
     df1 = df[['date_time','measurement_PM10','measurement_PM2.5']]
