@@ -8,10 +8,6 @@ from shapely.geometry import shape, Point
 import geopandas as gpd
 from branca.colormap import linear
 
-from Clean_Data import remove_outliers
-from Clean_Data import remove_missing
-from Load_Data import load_data
-
 def map_data(df, geo_boundaries, lat = "lat", lon = "lon", measurement_type = "measurement_PM10", time_interval = "5Min"):
     '''
     Maps the PM10 and PM2.5 concentration 
