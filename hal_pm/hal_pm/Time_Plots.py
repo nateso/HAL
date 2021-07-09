@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from .hal_pm import *
+from hal_pm import Filter_Data
 
 def plot_average_pol(df, ax = None):
     '''Function to plot the time series of the polution of the sensors with the highest/lowest average polution over time'''
