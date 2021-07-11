@@ -1,6 +1,6 @@
 from argparse import ArgumentParser, Namespace
 import datetime
-from package import *
+from hal_pm import *
 import matplotlib.pyplot as plt
 #from load_data import load_data
 #from filter_data import remove_missing, remove_outliers
@@ -53,6 +53,7 @@ def main(args):
         print("\n")
         print("Results for the second time interval")
         Plot_Mean.plot_mean_pm(pmdata, df2 = pmdata2, ax = axes)
+        fig.autofmt_xdate(rotation = 45)
         plt.savefig('plot_mean_2nddf')
 
     #8 Map
