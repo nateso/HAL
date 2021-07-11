@@ -57,7 +57,8 @@ def main(args):
         plt.savefig('plot_mean_2nddf')
 
     #8 Map
-    PM25_map = Map.map_data(df, "package/mapping_data/plz_ger.geojson", measurement_type = "measurement_PM2.5")
+    PM25_map = Map.map_data(pmdata, 'geoboundaries/plz_ger.geojson', measurement_type = "measurement_PM2.5")
+    PM10_map = Map.map_data(pmdata, 'geoboundaries/plz_ger.geojson', measurement_type = "measurement_PM10")
 
 if __name__ == "__main__":
     parser = ArgumentParser()
